@@ -1,6 +1,6 @@
 
 #define FMT_LIMIT 512
-fn GetLimiters(fmt[], slot, &pos_limiter, &pos_rank){
+GetLimiters(fmt[], slot, &pos_limiter, &pos_rank){
 	new increment,
 		length = strlen(fmt),
 		result_find = strfind(fmt, "|", true);
@@ -41,7 +41,7 @@ fn GetLimiters(fmt[], slot, &pos_limiter, &pos_rank){
 	return 1;
 }
 
-fn DeleteColum(_str[], select){
+DeleteColum(_str[], select){
 	new fmt[FMT_LIMIT];
 	new pos_limiter, pos_rank;
 	GetLimiters(_str, select, pos_limiter, pos_rank);
@@ -50,11 +50,7 @@ fn DeleteColum(_str[], select){
 	return fmt;
 }
 
-fn GetNumColums(fmt[]){
-
-}
-
-fn AddColum(const fmt[], const add[]){
+AddColum(const fmt[], const add[]){
 	new _str[FMT_LIMIT];
 	format(_str, FMT_LIMIT, "%s|%s", fmt, add);
 	return _str;
@@ -63,5 +59,11 @@ fn AddColum(const fmt[], const add[]){
 #include "a_samp"
 
 public OnGamemodeInit(){
-
+	new fmt[64] = "Colum1|Colum2|Colum3";
+	printf("fmt %s", fmt);
+	printf("strins %s", AddColum(fmt, "Colum4"));
+	//output "Colum1|Colum2|Colum3|Colum4"
+	
+	printf("DeleteColum %s", DeleteColum(fmt, 4));
+	//output "Colum1|Colum2|Colum3"
 }
