@@ -10,5 +10,11 @@ public OnGamemodeInit(){
 	
 	printf("DeleteColum %s", DeleteColum(fmt, 4));
 	//output "Colum1|Colum2|Colum3"
+	
+	new count = GetMaxColumns(fmt);
+	//output 3
+	
+	GetColumn(fmt, 2);
+	//output Colum2
 }
 ```
