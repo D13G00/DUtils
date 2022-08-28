@@ -56,6 +56,31 @@ AddColum(const fmt[], const add[]){
 	return _str;
 }
 
+GetColumn(fmt[], select){
+	new arr[10][32];
+	sscanf(fmt, "p<|>a<s[32]>[10]", arr);
+	if(isnull(arr[select])){
+		format(arr[select], 32, "Error: unknown column");
+	}
+	return arr[select];
+}
+
+GetMaxColumns(fmt[]){
+	new increment;
+	new length = strlen(fmt);
+	if(length < 1) return -1;
+	for(new i; i < length; i++){
+		if(length > 0 && increment == 0 && i == length){
+			//increment++;
+			break;
+		}
+		if(fmt[i] == '|'){
+			increment++;
+		}
+	}
+	return increment+1;
+}
+
 #include "a_samp"
 
 public OnGamemodeInit(){
