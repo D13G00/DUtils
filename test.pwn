@@ -1,3 +1,5 @@
+#include "a_samp"
+#include "sscanf2"
 
 #define FMT_LIMIT 512
 GetLimiters(fmt[], slot, &pos_limiter, &pos_rank){
@@ -80,8 +82,6 @@ GetMaxColumns(fmt[]){
 	}
 	return increment+1;
 }
-
-#include "a_samp"
 
 public OnGamemodeInit(){
 	new fmt[64] = "Colum1|Colum2|Colum3";
