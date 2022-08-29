@@ -16,5 +16,8 @@ public OnGamemodeInit(){
 	
 	GetColumn(fmt, 2);
 	//output Colum2
+	
+	printf("UpdateColumn %s", UpdateColumn(fmt, "Replace", 0));
+	//output "Replace|Colum2|Colum3"
 }
 ```
