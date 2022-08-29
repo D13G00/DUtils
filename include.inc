@@ -106,17 +106,3 @@ UpdateColumn(_str[], replace[], pos){
 	}
 	return str;
 }
-
-
-public OnGamemodeInit(){
-	new fmt[64] = "Colum1|Colum2|Colum3";
-	printf("fmt %s", fmt);
-	printf("strins %s", AddColum(fmt, "Colum4"));
-	//output "Colum1|Colum2|Colum3|Colum4"
-	
-	printf("DeleteColum %s", DeleteColum(fmt, 4));
-	//output "Colum1|Colum2|Colum3"
-	
-	printf("UpdateColumn %s", UpdateColumn(fmt, "Replace", 0));
-	//output "Replace|Colum2|Colum3"
-}
