@@ -83,6 +83,31 @@ GetMaxColumns(fmt[]){
 	return increment+1;
 }
 
+UpdateColumn(_str[], replace[], pos){
+	new str[512];
+	new result_find = strfind(_str, "|", true);
+	format(str, sizeof str, "%s", _str);
+	new pos_limiter, pos_rank;
+	GetLimiters(str, pos, pos_limiter, pos_rank);
+	if(result_find == -1){
+		print("result_find");
+		strdel(str, pos_limiter, pos_rank);
+		strins(str, replace, pos_limiter);
+		return str;
+	}
+	if(!pos){
+		print("!pos");
+		strdel(str, pos_limiter, pos_rank-1);
+		strins(str, replace, pos_limiter);
+	}else{
+		print("else");
+		strdel(str, pos_limiter+1, pos_rank);
+		strins(str, replace, pos_limiter+1);
+	}
+	return str;
+}
+
+
 public OnGamemodeInit(){
 	new fmt[64] = "Colum1|Colum2|Colum3";
 	printf("fmt %s", fmt);
@@ -91,4 +116,7 @@ public OnGamemodeInit(){
 	
 	printf("DeleteColum %s", DeleteColum(fmt, 4));
 	//output "Colum1|Colum2|Colum3"
+	
+	printf("UpdateColumn %s", UpdateColumn(fmt, "Replace", 0));
+	//output "Replace|Colum2|Colum3"
 }
