@@ -90,17 +90,14 @@ UpdateColumn(_str[], replace[], pos){
 	new pos_limiter, pos_rank;
 	GetLimiters(str, pos, pos_limiter, pos_rank);
 	if(result_find == -1){
-		print("result_find");
 		strdel(str, pos_limiter, pos_rank);
 		strins(str, replace, pos_limiter);
 		return str;
 	}
 	if(!pos){
-		print("!pos");
 		strdel(str, pos_limiter, pos_rank-1);
 		strins(str, replace, pos_limiter);
 	}else{
-		print("else");
 		strdel(str, pos_limiter+1, pos_rank);
 		strins(str, replace, pos_limiter+1);
 	}
