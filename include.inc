@@ -1,8 +1,13 @@
+/*
+	Copyright (c) d13g0
+    	Discord d13g0#3444
+*/
+
 #include "a_samp"
 #include "sscanf2"
 
 #define FMT_LIMIT 512
-GetLimiters(fmt[], slot, &pos_limiter, &pos_rank){
+stock GetLimiters(const fmt[], slot, &pos_limiter, &pos_rank){
 	new increment,
 		length = strlen(fmt),
 		result_find = strfind(fmt, "|", true);
@@ -43,7 +48,7 @@ GetLimiters(fmt[], slot, &pos_limiter, &pos_rank){
 	return 1;
 }
 
-DeleteColum(_str[], select){
+stock DeleteColum(const _str[], select){
 	new fmt[FMT_LIMIT];
 	new pos_limiter, pos_rank;
 	GetLimiters(_str, select, pos_limiter, pos_rank);
@@ -58,7 +63,7 @@ AddColum(const fmt[], const add[]){
 	return _str;
 }
 
-GetColumn(fmt[], select){
+GetColumn(const fmt[], select){
 	new arr[10][32];
 	sscanf(fmt, "p<|>a<s[32]>[10]", arr);
 	if(isnull(arr[select])){
@@ -67,7 +72,7 @@ GetColumn(fmt[], select){
 	return arr[select];
 }
 
-GetMaxColumns(fmt[]){
+GetMaxColumns(const fmt[]){
 	new increment;
 	new length = strlen(fmt);
 	if(length < 1) return -1;
@@ -83,7 +88,7 @@ GetMaxColumns(fmt[]){
 	return increment+1;
 }
 
-UpdateColumn(_str[], replace[], pos){
+UpdateColumn(const _str[], const replace[], pos){
 	new str[512];
 	new result_find = strfind(_str, "|", true);
 	format(str, sizeof str, "%s", _str);
