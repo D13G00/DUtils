@@ -1,4 +1,4 @@
-# Delimiters
+# DUtils
 ```c++
 public OnGamemodeInit(){
 	new fmt[64] = "Colum1|Colum2|Colum3";
