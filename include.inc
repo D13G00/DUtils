@@ -7,27 +7,28 @@
 #include "sscanf2"
 
 #define FMT_LIMIT 512
-stock GetLimiters(const fmt[], slot, &pos_limiter, &pos_rank){
-	new increment,
+stock GetLimiters(const fmt[], slot, &start_pos, &end_pos, const limiter[] = "|"){
+	new 
+		increment,
 		length = strlen(fmt),
-		result_find = strfind(fmt, "|", true);
+		result_find = strfind(fmt, limiter[0], true);
 	if(length == 0) return 0;
-	for(new i; i < length; i++){
-		if(fmt[i] == '|' && result_find != -1){
-			if(slot == 0){
-				pos_rank = i+1;
-				pos_limiter = 0;
-				break;
+	for(new i; i < length; i++){ 
+		if(fmt[i] == limiter[0] && result_find != -1){
+			if(slot == 0){ 
+				end_pos = i+1;
+				start_pos = 0; 
+				break; 
 			}
-			increment++;
+			increment++; 
 			if(increment == slot){
-				pos_limiter = i; //-> |
+				start_pos = i;
 				for(new a = i+1; a < strlen(fmt); a++){
-					if(fmt[a] == '|'){
-						pos_rank = a; //-> pos
+					if(fmt[a] == limiter[0]){
+						end_pos = a;
 						break;
 					}else if(length-1 == a){
-						pos_rank = a+1;
+						end_pos = a+1;
 						break;
 					}
 				}
@@ -35,12 +36,12 @@ stock GetLimiters(const fmt[], slot, &pos_limiter, &pos_rank){
 			}
 		}else if(result_find == -1){
 			if(slot == 0){
-				pos_limiter = 0;
-				pos_rank = length;
+				start_pos = 0;
+				end_pos = length;
 				break;
 			}else{
-				pos_limiter = length;
-				pos_rank = 0;
+				start_pos = length;
+				end_pos = 0;
 			}
 			break;
 		}
@@ -48,63 +49,78 @@ stock GetLimiters(const fmt[], slot, &pos_limiter, &pos_rank){
 	return 1;
 }
 
-stock DeleteColum(const _str[], select){
-	new fmt[FMT_LIMIT];
-	new pos_limiter, pos_rank;
+stock DeleteColum(_str[], select){
+	new fmt[FMT_LIMIT], pos_limiter, pos_rank;
 	GetLimiters(_str, select, pos_limiter, pos_rank);
 	strdel(_str, pos_limiter, pos_rank);
 	format(fmt, FMT_LIMIT, "%s", _str);
 	return fmt;
 }
 
-AddColum(const fmt[], const add[]){
+stock AddColum(const fmt[], const add[], const limiter[] = "|"){
 	new _str[FMT_LIMIT];
-	format(_str, FMT_LIMIT, "%s|%s", fmt, add);
+	if(strlen(fmt) < 1) format(_str, FMT_LIMIT, "%s", add);
+	else format(_str, FMT_LIMIT, "%s%s%s", fmt, limiter[0], add);
 	return _str;
 }
 
-GetColumn(const fmt[], select){
-	new arr[10][32];
-	sscanf(fmt, "p<|>a<s[32]>[10]", arr);
+stock GetColumn(const fmt[], select, const limiter[] = "|"){
+	new arr[10][512], str[64];
+	format(str, sizeof str, "p<%s>a<s[512]>[10]", limiter[0]);
+	sscanf(fmt, str, arr);
 	if(isnull(arr[select])){
 		format(arr[select], 32, "Error: unknown column");
 	}
 	return arr[select];
 }
 
-GetMaxColumns(const fmt[]){
+stock UpdateColumn(const fmt[], const update[], pos, const limiter[] = "|"){
+	new start_pos, end_pos, str[512];
+	format(str, sizeof str, "%s", fmt);
+	new max_c = GetMaxColumns(str)-1;
+	GetLimiters(fmt, pos, start_pos, end_pos, limiter[0]);
+	if(pos > 0){
+		if(max_c > 0){
+			if(pos != max_c){
+				if(pos == max_c-1) end_pos--;
+				end_pos++;
+			}
+		}else end_pos--;
+		start_pos++;
+	}else{
+		if(max_c > 0) end_pos--;
+	}
+	strdel(str, start_pos, end_pos);
+	strins(str, update, start_pos);
+	return str;
+}
+
+stock GetMaxColumns(const fmt[]){
 	new increment;
 	new length = strlen(fmt);
+	new result_find = strfind(fmt, "|", true);
+	if(fmt[result_find] == '|') increment++;
+	strfind(fmt, "|", false);
 	if(length < 1) return -1;
 	for(new i; i < length; i++){
-		if(length > 0 && increment == 0 && i == length){
-			//increment++;
-			break;
-		}
 		if(fmt[i] == '|'){
 			increment++;
 		}
+		if(length > 0 && increment == 0 && i == length-1){
+			increment++;
+			break;
+		}
 	}
-	return increment+1;
+	return increment;
 }
 
-UpdateColumn(const _str[], const replace[], pos){
-	new str[512];
-	new result_find = strfind(_str, "|", true);
-	format(str, sizeof str, "%s", _str);
-	new pos_limiter, pos_rank;
-	GetLimiters(str, pos, pos_limiter, pos_rank);
-	if(result_find == -1){
-		strdel(str, pos_limiter, pos_rank);
-		strins(str, replace, pos_limiter);
-		return str;
-	}
-	if(!pos){
-		strdel(str, pos_limiter, pos_rank-1);
-		strins(str, replace, pos_limiter);
-	}else{
-		strdel(str, pos_limiter+1, pos_rank);
-		strins(str, replace, pos_limiter+1);
-	}
-	return str;
+stock ConvertTimeStamp(time, &minutes, &seconds){
+	if(gettime()-time <= 0){
+		seconds = time-gettime();
+		if(seconds > 60) {
+			minutes = seconds/60;
+		}
+		seconds = seconds-minutes*60;
+	}else seconds = minutes = 0;
+	return 0;
 }
