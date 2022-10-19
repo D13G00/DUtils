@@ -1,23 +1,10 @@
-# DUtils
+# Funcs
 ```c++
-public OnGamemodeInit(){
-	new fmt[64] = "Colum1|Colum2|Colum3";
-	printf("fmt %s", fmt);
-	//output "Colum1|Colum2|Colum3"
-	
-	printf("strins %s", AddColum(fmt, "Colum4"));
-	//output "Colum1|Colum2|Colum3|Colum4"
-	
-	printf("DeleteColum %s", DeleteColum(fmt, 4));
-	//output "Colum1|Colum2|Colum3"
-	
-	new count = GetMaxColumns(fmt);
-	//output 3
-	
-	GetColumn(fmt, 2);
-	//output Colum2
-	
-	printf("UpdateColumn %s", UpdateColumn(fmt, "Replace", 0));
-	//output "Replace|Colum2|Colum3"
-}
+GetLimiters(const fmt[], slot, &start_pos, &end_pos, const limiter[] = "|");
+DeleteColum(_str[], select);
+AddColum(const fmt[], const add[], const limiter[] = "|");
+GetColumn(const fmt[], select, const limiter[] = "|");
+UpdateColumn(const fmt[], const update[], pos, const limiter[] = "|");
+GetMaxColumns(const fmt[], const delimiter[] = "|");
+ConvertTimeStamp(time, &minutes, &seconds);
 ```
