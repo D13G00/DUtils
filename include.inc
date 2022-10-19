@@ -95,15 +95,15 @@ stock UpdateColumn(const fmt[], const update[], pos, const limiter[] = "|"){
 	return str;
 }
 
-stock GetMaxColumns(const fmt[]){
+stock GetMaxColumns(const fmt[], const delimiter[] = "|"){
 	new increment;
 	new length = strlen(fmt);
-	new result_find = strfind(fmt, "|", true);
-	if(fmt[result_find] == '|') increment++;
-	strfind(fmt, "|", false);
+	new result_find = strfind(fmt, delimiter[0], true);
+	if(fmt[result_find] == delimiter[0]) increment++;
+	strfind(fmt, delimiter[0], false);
 	if(length < 1) return -1;
 	for(new i; i < length; i++){
-		if(fmt[i] == '|'){
+		if(fmt[i] == delimiter[0]){
 			increment++;
 		}
 		if(length > 0 && increment == 0 && i == length-1){
